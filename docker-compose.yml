@@ -5,7 +5,7 @@ services:
     image: webdevops/php-nginx:7.3
     working_dir: /app
     ports:
-      - 8000:8000
+      - 8000:80
     depends_on:
       - database
     volumes:
@@ -30,7 +30,7 @@ services:
     depends_on:
       - database
     ports:
-      - "8080:8080"
+      - "8080:80"
     environment:
       MYSQL_ROOT_PASSWORD: root
       PMA_HOST: database
