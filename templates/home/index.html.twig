@@ -16,7 +16,7 @@
                 <a href="{{ path('video_profile', {'byId':video.id}) }}"><h4>{{ video.title }}</h4></a>
                 <iframe src="{{ video.urlEmbed }}" width="100%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 <p style="color: #C82829">{% for category in video.category %} #{{ category.name }} {% endfor %}</p>
-                <p>{{ video.description }}</p>
+                <p style="    word-break: break-all;">{{ video.description }}</p>
                 <p>Created by <a href="{{ path('user_profile', {'byId':video.user.id}) }}">{{ video.user.firstname }} {{ video.user.lastname }}</a></p>
             {# <a href="{{ path('article_profile', {'byName':article.name}) }}">Link</a>
             <a href="{{ path('article_remove', {'id': article.id}) }} ">Delete</a>#}
@@ -34,7 +34,7 @@
                     <a href="{{ path('video_profile', {'byId':video.id}) }}"> <h4>{{ video.title }}</h4></a>
                     <iframe src="{{ video.urlEmbed }}" width="100%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     <p style="color: #C82829">{% for category4 in video.category %} #{{ category4.name }} {% endfor %}</p>
-                    <p>{{ video.description }}</p>
+                    <p style="    word-break: break-all;">{{ video.description }}</p>
                     <p>Created by {{ video.user.firstname }} {{ video.user.lastname }}</p>
                     {# <a href="{{ path('article_profile', {'byName':article.name}) }}">Link</a>
                     <a href="{{ path('article_remove', {'id': article.id}) }} ">Delete</a>#}
