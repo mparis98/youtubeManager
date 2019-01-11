@@ -47,4 +47,17 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findByDate(){
+        $now= new \DateTime();
+
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.isActive = 1')
+            ->andWhere('a.createdAt <= :now')
+            ->orderBy('a.id', 'ASC')
+            ->setParameter('now',$now)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

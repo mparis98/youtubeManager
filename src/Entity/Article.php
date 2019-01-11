@@ -41,6 +41,16 @@ class Article
      */
     private $content;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default" : 1})
+     */
+    private $isActive = true;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="articles")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +130,34 @@ class Article
     public function setContent($content): void
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getisActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @param mixed $isActive
+     */
+    public function setIsActive($isActive): void
+    {
+        $this->isActive = $isActive;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
 
