@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SecurityController!{% endblock %}
+
+{% block body %}
+    {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+    {% endif %}
+    <section style="    width: 50%;
+    position: relative;
+    text-align: left;
+    left: 25%;
+    top: 50px;">
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+    <div>
+        {{ form_label(form.email) }}
+        {{ form_errors(form.email) }}
+        {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_help(form.email) }}
+    </div>
+    <div>
+        {{ form_label(form.password) }}
+        {{ form_errors(form.password) }}
+        {{ form_widget(form.password, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_help(form.password) }}
+    </div>
+    <div>
+        {{ form_widget(form.submit) }}
+{{ form_end(form) }}
+    </div>
+    </section>
+{% endblock %}

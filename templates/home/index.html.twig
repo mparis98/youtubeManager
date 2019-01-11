@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+<section>
+<div class="example-wrapper">
+    <h1 style="text-align: center">Articles</h1>
+
+    <ul>
+        {% for article in articles %}
+            <li>{{ article.name }} - {{ article.author }} - {{ article.createdAt|date }}</li>
+            <a href="{{ path('article_profile', {'byName':article.name}) }}">Link</a>
+            <a href="{{ path('article_remove', {'id': article.id}) }} ">Delete</a>
+            {% if article.imageUrl is not null %}
+                <img src="{{ article.imageUrl }}" style="width: 50%;">
+            {% endif %}
+            <p>{{ article.content|nl2br}}</p>
+        {% endfor %}
+    </ul>
+
+</div></section>
+{% endblock %}

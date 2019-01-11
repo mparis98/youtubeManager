@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello !{% endblock %}
+{% block body %}
+
+    <h1>User</h1>
+   <p>{{ user.firstname }}</p>
+    <p>{{ user.lastname }}</p>
+    <p>{{ user.email }}</p>
+    <p>{{ user.birthday|date }}</p>
+
+{% endblock %}

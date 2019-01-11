@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SecurityController!{% endblock %}
+
+{% block body %}<section style="    width: 50%;
+    position: relative;
+    text-align: left;
+    left: 25%;
+    top: 50px;">
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    <div>
+        {{ form_label(form.firstname) }}
+        {{ form_errors(form.firstname) }}
+        {{ form_widget(form.firstname, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_help(form.firstname) }}
+    </div>
+
+    <div>
+        {{ form_label(form.lastname) }}
+        {{ form_errors(form.lastname) }}
+        {{ form_widget(form.lastname, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_help(form.lastname) }}
+    </div>
+    <div>
+        {{ form_label(form.email) }}
+        {{ form_errors(form.email) }}
+        {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_help(form.email) }}
+    </div>
+    <div>
+        {{ form_label(form.birthday) }}
+        {{ form_errors(form.birthday) }}
+        {{ form_widget(form.birthday, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_help(form.birthday) }}
+    </div>
+    <div>
+        {{ form_label(form.password.first) }}
+        {{ form_errors(form.password.first) }}
+        {{ form_widget(form.password.first, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_help(form.password.first) }}
+    </div>
+    <div>
+        {{ form_label(form.password.second) }}
+        {{ form_errors(form.password.second) }}
+        {{ form_widget(form.password.second, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_help(form.password.second) }}
+    </div>
+    <div>
+    {{ form_widget(form.submit) }}
+    </div>
+    {{ form_end(form) }}
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        jQuery(document).ready(function() {
+            $('.js-datepicker').datepicker({format: 'yyyy-mm-dd'});
+
+        });
+    </script>
+{% endblock %}
+
