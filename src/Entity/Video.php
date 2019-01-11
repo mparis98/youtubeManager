@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\VideoRepository")
  */
-class Article
+class Video
 {
     /**
      * @ORM\Id()
@@ -19,7 +19,7 @@ class Article
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $title;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -27,19 +27,14 @@ class Article
     private $createdAt;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $author;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $imageUrl;
+    private $youtubeUrl;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $content;
+    private $description;
 
     /**
      * @ORM\Column(type="boolean", options={"default" : 1})
@@ -47,7 +42,7 @@ class Article
     private $isActive = true;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="articles")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="video")
      */
     private $user;
 
@@ -56,17 +51,6 @@ class Article
         return $this->id;
     }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
 
     /**
      * @return mixed
@@ -87,49 +71,49 @@ class Article
     /**
      * @return mixed
      */
-    public function getAuthor()
+    public function getTitle()
     {
-        return $this->author;
+        return $this->title;
     }
 
     /**
-     * @param mixed $author
+     * @param mixed $title
      */
-    public function setAuthor($author): void
+    public function setTitle($title): void
     {
-        $this->author = $author;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getImageUrl()
-    {
-        return $this->imageUrl;
-    }
-
-    /**
-     * @param mixed $imageUrl
-     */
-    public function setImageUrl($imageUrl): void
-    {
-        $this->imageUrl = $imageUrl;
+        $this->title = $title;
     }
 
     /**
      * @return mixed
      */
-    public function getContent()
+    public function getYoutubeUrl()
     {
-        return $this->content;
+        return $this->youtubeUrl;
     }
 
     /**
-     * @param mixed $content
+     * @param mixed $youtubeUrl
      */
-    public function setContent($content): void
+    public function setYoutubeUrl($youtubeUrl): void
     {
-        $this->content = $content;
+        $this->youtubeUrl = $youtubeUrl;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description): void
+    {
+        $this->description = $description;
     }
 
     /**

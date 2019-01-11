@@ -22,7 +22,7 @@ services:
       - ./docker/mysqlconf:/etc/mysql/conf.d
       - ./docker/mysql:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: symfonydemo
+      MYSQL_DATABASE: youtubeManager
       MYSQL_ROOT_PASSWORD: root
 
   phpmyadmin:

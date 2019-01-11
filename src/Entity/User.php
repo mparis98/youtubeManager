@@ -7,9 +7,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity("email")
  */
 class User implements UserInterface
 {
@@ -34,7 +37,7 @@ class User implements UserInterface
 
     /**
      * @Assert\Email()
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $email;
 
@@ -45,7 +48,7 @@ class User implements UserInterface
     private $birthday;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Video", mappedBy="user")
      */
     private $articles;
 
@@ -119,14 +122,14 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Article[]
+     * @return Collection|Video[]
      */
     public function getArticles(): Collection
     {
         return $this->articles;
     }
 
-    public function addArticle(Article $article): self
+    public function addArticle(Video $article): self
     {
         if (!$this->articles->contains($article)) {
             $this->articles[] = $article;
@@ -136,7 +139,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removeArticle(Article $article): self
+    public function removeArticle(Video $article): self
     {
         if ($this->articles->contains($article)) {
             $this->articles->removeElement($article);
