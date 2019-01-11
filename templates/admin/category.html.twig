@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <section style="    width: 50%;
+    position: relative;
+    text-align: left;
+margin-left: auto;
+    margin-right: auto;    top: 50px;">
+        <h1 style="text-align: center">Listing category</h1>
+<table class="table table-hover" style="text-align: center">
+    <thead class="thead-dark">
+    <tr>
+    <th scope="col">Name</th>
+    <th scope="col">Description</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Remove</th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for cat in category %}
+        <tr>
+            <td>
+                {{ cat.name }}
+            </td>
+            <td>{{ cat.description }}</td>
+            <td><a href="{{ path('category_profile_update', {'byId':cat.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+            <td><a href="{{ path('admin_category_remove', {'id':cat.id}) }}"><span class="glyphicon glyphicon-trash"></span> </a></td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+    </section>
+{% endblock %}

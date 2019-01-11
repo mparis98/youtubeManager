@@ -2,34 +2,28 @@
 
 namespace App\Form;
 
-use App\Entity\User;
+use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ProfileUserType extends AbstractType
+class CategoryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstname')
-            ->add('lastname')
-            //->add('email')
-            ->add('birthday', BirthdayType::class, [
-                'widget' => 'single_text',
-            ])
-            //->add('roles')
-           // ->add('password')
-            ->add('submit',SubmitType::class)
+            ->add('name')
+            ->add('description')
+            //->add('videos')
+            ->add('submit', SubmitType::class)
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => Category::class,
         ]);
     }
 }

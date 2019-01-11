@@ -23,30 +23,25 @@ class VideoController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $url = $user->getYoutubeUrl();
+            preg_match('/[\\?\\&]v=([^\\?\\&]+)/', $url, $matches);
+            $embed = $matches[1];
+            $user->setUrlEmbed('https://www.youtube.com/embed/'.$embed);
             $entityManager->persist($user);
             $entityManager->flush();
 // $this->redirectToRoute(‘register_sucess’);
         }
-        $articles= $this->getDoctrine()->getRepository(Video::class)->findByDate();
+        $videos= $this->getDoctrine()->getRepository(Video::class)->findByDate();
 
-        return $this->render('article/index.html.twig', [
+        return $this->render('video/index.html.twig', [
             'form' => $form->createView(),
-            'articles'=>$articles,
+            'video'=>$videos,
         ]);
     }
 
     /**
-     * @Route("/user/profile-{byName}", name="video_profile")
-     * @ParamConverter("article", options={"mapping"={"byName"="name"}})
-     */
-    public function name(Video $article){
-
-        return $this->render('article/article.html.twig', array('article'=>$article));
-    }
-
-    /**
      * @Route("/video/remove/{id}", name="video_remove")
-     * @ParamConverter("article", options={"mapping"={"id"="id"}})
+     * @ParamConverter("video", options={"mapping"={"id"="id"}})
      */
     public function remove(Video $article, EntityManagerInterface
     $entityManager )

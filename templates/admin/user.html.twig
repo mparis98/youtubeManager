@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <section style="    width: 70%;
+    position: relative;
+    text-align: left;
+margin-left: auto;
+    margin-right: auto;    top: 50px;">
+        <h1 style="text-align: center">Listing users</h1>
+<table class="table table-hover" style="text-align: center">
+    <thead class="thead-dark">
+    <tr>
+    <th scope="col">Firstname</th>
+    <th scope="col">Lastname</th>
+    <th scope="col">Email</th>
+    <th scope="col">Birthday</th>
+    <th scope="col">Roles</th>
+    <th scope="col">Videos Published</th>
+    <th scope="col">Videos no Published</th>
+        <th scope="col">Edit</th>
+
+        <th scope="col">Remove</th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+        <tr>
+            <td>
+                {{ user.firstname }}
+            </td>
+            <td>{{ user.lastname }}</td>
+            <td><a href="{{ path('user_profile_update', {'byId':user.id}) }}">{{ user.email }}</a></td>
+            <td>{{ user.birthday|date }}</td>
+            <td>{% for role in user.roles %}{{ role }}{% endfor %}</td>
+            <td>{% for video in videos %}
+                    {% if video.user == user and video.isActive == 1%}
+                        <a href="{{ path('video_profile_update', {'byId':video.id}) }}">{{ video.title }}</a>
+                    {% endif %}
+                {% endfor %}</td>
+            <td>{% for video in videos %}
+                    {% if video.user == user and video.isActive == 0%}
+                        <a href="{{ path('video_profile_update', {'byId':video.id}) }}">{{ video.title }}</a>
+                    {% endif %}
+                {% endfor %}</td>
+            <td><a href="{{ path('user_profile_update', {'byId':user.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+            <td><a href="{{ path('admin_user_remove', {'id':user.id}) }}"><span class="glyphicon glyphicon-trash"></span> </a></td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+    </section>
+{% endblock %}

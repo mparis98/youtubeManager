@@ -101,6 +101,9 @@
             "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
         }
     },
+    "symfony/asset": {
+        "version": "v4.2.2"
+    },
     "symfony/cache": {
         "version": "v4.2.1"
     },
@@ -133,6 +136,9 @@
     },
     "symfony/event-dispatcher": {
         "version": "v4.2.1"
+    },
+    "symfony/expression-language": {
+        "version": "v4.2.2"
     },
     "symfony/filesystem": {
         "version": "v4.2.1"

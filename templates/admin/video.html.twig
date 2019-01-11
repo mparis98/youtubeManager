@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <section style="    width: 100%;
+    position: relative;
+    text-align: left;
+margin-left: auto;
+    margin-right: auto;    top: 50px;">
+        <h1 style="text-align: center">Listing users</h1>
+<table class="table table-hover" style="text-align: center">
+    <thead class="thead-dark">
+    <tr>
+    <th scope="col">Title</th>
+    <th scope="col">CreatedAt</th>
+    <th scope="col">YoutubeUrl</th>
+    <th scope="col">Description</th>
+    <th scope="col">IsActive</th>
+        <th scope="col">Categories</th>
+
+        <th scope="col">AuthorFirstname</th>
+    <th scope="col">AuthorLastname</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Remove</th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for video in videos %}
+        <tr>
+            <td>
+                {{ video.title }}
+            </td>
+            <td>{{ video.createdAt|date }}</td>
+            <td>{{ video.youtubeUrl }}</td>
+            <td>{{ video.description }}</td>
+            <td>{{ video.isActive }}</td>
+            <td>{% for cat in video.category %}
+                    #{{ cat.name }}
+                {% endfor %}</td>
+            <td>{{ video.user.firstname }}</td>
+            <td>{{ video.user.lastname }}</td>
+            <td><a href="{{ path('video_profile_update', {'byId':video.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+            <td><a href="{{ path('admin_video_remove', {'id':video.id}) }}"><span class="glyphicon glyphicon-trash"></span> </a></td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+    </section>
+{% endblock %}

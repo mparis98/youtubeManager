@@ -1,23 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Youtube Manager{% endblock %}
 
 {% block body %}
+    {% set good = false %}
 <section>
 <div class="example-wrapper">
-    <h1 style="text-align: center">Articles</h1>
+    <div class="container">
 
-    <ul>
-        {% for article in articles %}
-            <li>{{ article.name }} - {{ article.author }} - {{ article.createdAt|date }}</li>
-            <a href="{{ path('article_profile', {'byName':article.name}) }}">Link</a>
-            <a href="{{ path('article_remove', {'id': article.id}) }} ">Delete</a>
-            {% if article.imageUrl is not null %}
-                <img src="{{ article.imageUrl }}" style="width: 50%;">
-            {% endif %}
-            <p>{{ article.content|nl2br}}</p>
+    <div class="row">
+        <h1 style="text-align: center">All videos</h1>
+
+        {% for video in videos %}
+            <div class="col-md-3">
+                <a href="{{ path('video_profile', {'byId':video.id}) }}"><h4>{{ video.title }}</h4></a>
+                <iframe src="{{ video.urlEmbed }}" width="100%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <p style="color: #C82829">{% for category in video.category %} #{{ category.name }} {% endfor %}</p>
+                <p>{{ video.description }}</p>
+                <p>Created by <a href="{{ path('user_profile', {'byId':video.user.id}) }}">{{ video.user.firstname }} {{ video.user.lastname }}</a></p>
+            {# <a href="{{ path('article_profile', {'byName':article.name}) }}">Link</a>
+            <a href="{{ path('article_remove', {'id': article.id}) }} ">Delete</a>#}
+
+            </div>
         {% endfor %}
-    </ul>
+    </div>
+        {% for category2 in categories %}
+        <div class="row">
+            <h2 style="text-align: center">#{{ category2.name }}</h2>
+                {% for video in videos %}
+                    {% if category2 in video.category %}
 
+                <div class="col-md-3">
+                    <a href="{{ path('video_profile', {'byId':video.id}) }}"> <h4>{{ video.title }}</h4></a>
+                    <iframe src="{{ video.urlEmbed }}" width="100%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <p style="color: #C82829">{% for category4 in video.category %} #{{ category4.name }} {% endfor %}</p>
+                    <p>{{ video.description }}</p>
+                    <p>Created by {{ video.user.firstname }} {{ video.user.lastname }}</p>
+                    {# <a href="{{ path('article_profile', {'byName':article.name}) }}">Link</a>
+                    <a href="{{ path('article_remove', {'id': article.id}) }} ">Delete</a>#}
+
+                </div>
+                {% endif %}
+
+            {% endfor %}
+        </div>
+
+        {% endfor %}
+        </div>
 </div></section>
 {% endblock %}

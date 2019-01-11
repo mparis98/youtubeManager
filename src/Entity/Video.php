@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,14 +24,19 @@ class Video
     private $title;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=false)
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $youtubeUrl;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    private $urlEmbed;
 
     /**
      * @ORM\Column(type="text")
@@ -42,9 +49,19 @@ class Video
     private $isActive = true;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="video")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="videos")
      */
     private $user;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Category", inversedBy="videos")
+     */
+    private $category;
+
+    public function __construct()
+    {
+        $this->category = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -142,6 +159,48 @@ class Video
         $this->user = $user;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategory(): Collection
+    {
+        return $this->category;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->category->contains($category)) {
+            $this->category[] = $category;
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        if ($this->category->contains($category)) {
+            $this->category->removeElement($category);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUrlEmbed()
+    {
+        return $this->urlEmbed;
+    }
+
+    /**
+     * @param mixed $urlEmbed
+     */
+    public function setUrlEmbed($urlEmbed): void
+    {
+        $this->urlEmbed = $urlEmbed;
     }
 
 

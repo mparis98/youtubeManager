@@ -50,7 +50,7 @@ class User implements UserInterface
     /**
      * @ORM\OneToMany(targetEntity="Video", mappedBy="user")
      */
-    private $articles;
+    private $videos;
 
     /**
      * @ORM\Column(type="simple_array")
@@ -64,7 +64,7 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->articles = new ArrayCollection();
+        $this->videos = new ArrayCollection();
         $this->roles = array('ROLE_USER');
     }
 

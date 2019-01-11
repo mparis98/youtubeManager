@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Video;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,8 +12,12 @@ use App\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\ProfileUserType;
+use App\Form\VideoType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-
+/**
+ * @Security("has_role('ROLE_USER')")
+ */
 class UserController extends AbstractController
 {
     /**
@@ -38,8 +43,8 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/user/profile-{byFirstname}", name="user_profile")
-     * @ParamConverter("user", options={"mapping"={"byFirstname"="firstname"}})
+     * @Route("/user/profile-{byId}", name="user_profile")
+     * @ParamConverter("user", options={"mapping"={"byId"="id"}})
      */
     public function firstname(Request $request, UserRepository $userRepository, User $user){
 
@@ -47,7 +52,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/profile", name="profile")
+     * @Route("/user/profile", name="profile")
      */
     public function profile(Request $request, EntityManagerInterface $entityManager)
     {
@@ -77,5 +82,46 @@ class UserController extends AbstractController
         $entityManager ->flush();
         $this->addFlash('success', 'User supprimé!');
         return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("/user/list", name="user_list")
+     */
+    public function list(Request $request, EntityManagerInterface $entityManager)
+    {
+        $user = $this->getUser();
+        $videos = $this->getDoctrine()->getRepository(Video::class)->findBy(array('user'=>$user));
+        return $this->render('user/list.html.twig', [
+            'videos' => $videos,
+        ]);
+    }
+
+    /**
+     * @Route("/user/video/profile-{byId}", name="user_video_profile_update")
+     * @ParamConverter("video", options={"mapping"={"byId"="id"}})
+     */
+    public function updateVideo(Video $video, Request $request, EntityManagerInterface $entityManager){
+        if ($video->getUser() === $this->getUser()){
+            $user=$this->getUser();
+        $form = $this->createForm(VideoType::class, $video);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $url = $user->getYoutubeUrl();
+            preg_match('/[\\?\\&]v=([^\\?\\&]+)/', $url, $matches);
+            $embed = $matches[1];
+            $user->setUrlEmbed('https://www.youtube.com/embed/'.$embed);
+            $entityManager->persist($video);
+            $entityManager->flush();
+            $this->redirectToRoute('admin_users');
+        }
+
+        return $this->render('video/video.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    else{
+        $this->redirectToRoute('home');
+
+    }
     }
 }

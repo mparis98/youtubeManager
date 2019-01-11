@@ -1,0 +1,17 @@
+button{
+    background-color: #C82829;
+    color: #ffffff;
+    padding: 10px 16px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+li{
+    margin-top: 5px;
+    color: #777 !important;
+}
+
+section{
+    margin-top: 70px;
+}

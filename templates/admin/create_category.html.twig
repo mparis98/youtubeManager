@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <section style="    width: 50%;
+    position: relative;
+    text-align: left;
+    left: 25%;
+    top: 50px;">
+        <h1 style="text-align: center">Create a category</h1>
+
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+        <div>
+            {{ form_label(form.name) }}
+            {{ form_errors(form.name) }}
+            {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_help(form.name) }}
+        </div>
+
+        <div>
+            {{ form_label(form.description) }}
+            {{ form_errors(form.description) }}
+            {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_help(form.description) }}
+        </div>
+
+        <div>
+            {{ form_widget(form.submit) }}
+        </div>
+        {{ form_end(form) }}
+    </section>
+{% endblock %}
