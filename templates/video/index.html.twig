@@ -31,12 +31,14 @@ margin-left: auto;
             {{ form_widget(form.category, { 'attr': {'class': 'form-control'} }) }}
             {{ form_help(form.category) }}
         </div>
+        {% if is_granted('ROLE_ADMIN') %}
         <div>
             {{ form_label(form.user) }}
             {{ form_errors(form.user) }}
             {{ form_widget(form.user, { 'attr': {'class': 'form-control'} }) }}
             {{ form_help(form.user) }}
         </div>
+        {% endif %}
         <div>
             {{ form_label(form.createdAt) }}
             {{ form_errors(form.createdAt) }}

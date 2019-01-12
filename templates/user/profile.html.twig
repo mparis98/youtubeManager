@@ -2,16 +2,45 @@
 
 {% block title %}Hello !{% endblock %}
 {% block body %}
+    {% set row = 0 %}
+
     <section style="    width: 80%;
     position: relative;
     text-align: left;
 margin-left: auto;
     margin-right: auto;    top: 50px;">
-    <h1>User</h1>
+        <div class="container">
+            <div class="row" style="text-align: center;">
+
+            <h1>User</h1>
    <p>{{ user.firstname }}</p>
     <p>{{ user.lastname }}</p>
     <p>{{ user.email }}</p>
     <p>{{ user.birthday|date }}</p>
+            </div>
+        <div class="row">
+            <h1 style="text-align: center">Videos of this user</h1>
+
+            {% for video in videos %}
+                <div class="col-md-3">
+                    <a href="{{ path('video_profile', {'byId':video.id}) }}" style="color: #333; font-weight: bold;"><h4>{{ video.title }}</h4></a>
+                    <iframe src="{{ video.urlEmbed }}" width="100%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <p style="color: #C82829 !important;">{% for category in video.category %}  <a href="{{ path('category_profile', {'byId':category.id}) }}" style="color: #C82829 !important;">#{{ category.name }}</a> {% endfor %}</p>
+                    <p style="    word-break: break-all;">{{ video.description }}</p>
+                    {# <a href="{{ path('article_profile', {'byName':article.name}) }}">Link</a>
+                    <a href="{{ path('article_remove', {'id': article.id}) }} ">Delete</a>#}
+
+                </div>
+            {% set row = row+1 %}
+            {% if row == 4 %}
+        </div>
+            <div class="row">
+                {% set row = 0 %}
+
+                {% endif %}
+            {% endfor %}
+        </div>
+        </div>
     </section>
 
 {% endblock %}

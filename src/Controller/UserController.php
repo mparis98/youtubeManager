@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Video;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
@@ -14,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Form\ProfileUserType;
 use App\Form\VideoType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use App\Event\VideoEvent;
 
 /**
  * @Security("has_role('ROLE_USER')")
@@ -80,7 +83,7 @@ class UserController extends AbstractController
         }
         $entityManager->remove($user);
         $entityManager ->flush();
-        $this->addFlash('success', 'User supprimé!');
+        $this->addFlash('success', 'User removed !');
         return $this->redirectToRoute('home');
     }
 
@@ -100,19 +103,27 @@ class UserController extends AbstractController
      * @Route("/user/video/profile-{byId}", name="user_video_profile_update")
      * @ParamConverter("video", options={"mapping"={"byId"="id"}})
      */
-    public function updateVideo(Video $video, Request $request, EntityManagerInterface $entityManager){
+    public function updateVideo(Video $video, Request $request, EntityManagerInterface $entityManager, LoggerInterface $logger, EventDispatcherInterface $eventDispatcher){
         if ($video->getUser() === $this->getUser()){
             $user=$this->getUser();
         $form = $this->createForm(VideoType::class, $video);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $url = $user->getYoutubeUrl();
-            preg_match('/[\\?\\&]v=([^\\?\\&]+)/', $url, $matches);
-            $embed = $matches[1];
-            $user->setUrlEmbed('https://www.youtube.com/embed/'.$embed);
-            $entityManager->persist($video);
-            $entityManager->flush();
-            $this->redirectToRoute('admin_users');
+            if (filter_var($url, FILTER_VALIDATE_URL)) {
+                preg_match('/[\\?\\&]v=([^\\?\\&]+)/', $url, $matches);
+                $embed = $matches[1];
+                $user->setUrlEmbed('https://www.youtube.com/embed/' . $embed);
+                $entityManager->persist($video);
+                $entityManager->flush();
+                $logger->info('Video updated ! User email :' . $this->getUser()->getEmail() . ', title :' . $video->getTitle() . ', id :' . $video->getId());
+                $event = new VideoEvent($video);
+                $eventDispatcher->dispatch(VideoEvent::UPDATED, $event);
+                $this->redirectToRoute('admin_users');
+            }
+            else{
+                $this->addFlash('error', 'Wrong URL !');
+            }
         }
 
         return $this->render('video/video.html.twig', [

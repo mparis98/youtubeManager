@@ -32,7 +32,7 @@ class SecurityController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             $logger->info('User registered now !');
-            $this->addFlash('success', 'Inscription terminé avec succès!');
+            $this->addFlash('success', 'Registered !');
             $event = new UserRegisteredEvent($user);
             $eventDispatcher->dispatch(UserRegisteredEvent::NAME, $event);
             return $this->redirectToRoute('home');
@@ -55,5 +55,18 @@ class SecurityController extends AbstractController
             'error' => $error ? $error->getMessage() : null,
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/logout", name="logout")
+     */
+    public function logout(AuthenticationUtils $authenticationUtils, LoggerInterface $logger)
+    {
+        if($this->getUser()) {
+            $this->get('security.token_storage')->setToken(null);
+            $this->get('session')->invalidate();
+        }
+        $this->addFlash('success', 'User disconnected!');
+        $this->redirectToRoute('home');
     }
 }

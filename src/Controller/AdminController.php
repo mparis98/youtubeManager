@@ -5,8 +5,11 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Entity\User;
 use App\Entity\Video;
+use App\Event\VideoEvent;
 use App\Form\CategoryType;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -44,6 +47,8 @@ class AdminController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($category);
             $entityManager->flush();
+            $this->addFlash('success', 'Category created !');
+
 // $this->redirectToRoute(‘register_sucess’);
         }
         return $this->render('admin/create_category.html.twig', [
@@ -68,13 +73,27 @@ class AdminController extends AbstractController
      * @Route("/admin/video/profile-{byId}", name="video_profile_update")
      * @ParamConverter("video", options={"mapping"={"byId"="id"}})
      */
-    public function updateVideo(Video $video, Request $request, EntityManagerInterface $entityManager){
+    public function updateVideo(Video $video, Request $request, EntityManagerInterface $entityManager, LoggerInterface $logger, EventDispatcherInterface $eventDispatcher){
         $form = $this->createForm(VideoType::class, $video);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($video);
-            $entityManager->flush();
-            $this->redirectToRoute('admin_users');
+            $url = $video->getYoutubeUrl();
+            if (filter_var($url, FILTER_VALIDATE_URL)) {
+                preg_match('/[\\?\\&]v=([^\\?\\&]+)/', $url, $matches);
+                $embed = $matches[1];
+                $video->setUrlEmbed('https://www.youtube.com/embed/' . $embed);
+                $entityManager->persist($video);
+                $entityManager->flush();
+                $this->addFlash('success', 'Video updated !');
+
+                $logger->info('Video updated ! User email :' . $this->getUser()->getEmail() . ', title :' . $video->getTitle() . ', id :' . $video->getId());
+                $event = new VideoEvent($video);
+                $eventDispatcher->dispatch(VideoEvent::UPDATED, $event);
+                $this->redirectToRoute('admin_users');
+            }
+            else{
+                $this->addFlash('error', 'Wrong URL !');
+            }
         }
 
         return $this->render('video/video.html.twig', [
@@ -93,6 +112,8 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($user);
             $entityManager->flush();
+            $this->addFlash('success', 'User updated !');
+
             return $this->redirectToRoute('admin_users');
         }
         return $this->render('security/profile.html.twig', [
@@ -109,6 +130,8 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($category);
             $entityManager->flush();
+            $this->addFlash('success', 'Category updated !');
+
             $this->redirectToRoute('admin_category');
         }
 
@@ -124,11 +147,14 @@ class AdminController extends AbstractController
      */
     public function removeVideo
     (Video $article, EntityManagerInterface
-    $entityManager )
+    $entityManager, LoggerInterface $logger, EventDispatcherInterface $eventDispatcher )
     {
         $entityManager ->remove($article);
         $entityManager ->flush();
-        $this->addFlash('success', 'Video supprimé!');
+        $logger->info('Video removed ! User email :'.$this->getUser()->getEmail().', title :'.$article->getTitle().', id :'.$article->getId());
+        $event = new VideoEvent($article);
+        $eventDispatcher->dispatch(VideoEvent::REMOVED, $event);
+        $this->addFlash('success', 'Video removed !');
         return $this->redirectToRoute( 'home');
     }
 
@@ -145,7 +171,7 @@ class AdminController extends AbstractController
         }
         $entityManager->remove($user);
         $entityManager ->flush();
-        $this->addFlash('success', 'User supprimé!');
+        $this->addFlash('success', 'User removed!');
         return $this->redirectToRoute('home');
     }
 
@@ -160,7 +186,7 @@ class AdminController extends AbstractController
 
         $entityManager->remove($category);
         $entityManager ->flush();
-        $this->addFlash('success', 'Catégorie supprimé!');
+        $this->addFlash('success', 'Category removed!');
         return $this->redirectToRoute('home');
     }
 

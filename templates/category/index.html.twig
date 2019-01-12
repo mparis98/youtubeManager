@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Youtube Manager{% endblock %}
+
+{% block body %}
+    {% set row = 0 %}
+<section>
+<div class="example-wrapper">
+    <div class="container">
+
+    <div class="row">
+        <h1 style="text-align: center">#{{ category.name }}</h1>
+
+        {% for categorie in categories %}
+            <div class="col-md-3">
+                <a href="{{ path('video_profile', {'byId':categorie.id}) }}" style="color: #333; font-weight: bold;"><h4>{{ categorie.title }}</h4></a>
+                <iframe src="{{ categorie.urlEmbed }}" width="100%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <p style="color: #C82829">{% for category1 in categorie.category %} #{{ category1.name }} {% endfor %}</p>
+                <p style="    word-break: break-all;">{{ categorie.description }}</p>
+                <p>Created by <a href="{{ path('user_profile', {'byId':categorie.user.id}) }}" style="color: #333; font-weight: bold;">{{ categorie.user.firstname }} {{ categorie.user.lastname }}</a></p>
+            {# <a href="{{ path('article_profile', {'byName':article.name}) }}">Link</a>
+            <a href="{{ path('article_remove', {'id': article.id}) }} ">Delete</a>#}
+
+            </div>
+        {% set row = row+1 %}
+        {% if row == 4 %}
+    </div>
+        <div class="row">
+            {% set row = 0 %}
+
+            {% endif %}
+        {% endfor %}
+    </div>
+        </div>
+</div></section>
+{% endblock %}

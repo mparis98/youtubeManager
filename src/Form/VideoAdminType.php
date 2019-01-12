@@ -2,17 +2,18 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
 use App\Entity\Video;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use App\Entity\User;
-class VideoType extends AbstractType
+use App\Entity\Category;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+USE App\Entity\User;
+USE Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
+class VideoAdminType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -34,10 +35,10 @@ class VideoType extends AbstractType
                 'label'    => 'Publié ?',
                 'required' => true,
             ])
-            //->add('user', EntityType::class, [
-              //  'class' => User::class,
-                //'choice_label' => 'email',
-            //])
+            ->add('user', EntityType::class, [
+              'class' => User::class,
+            'choice_label' => 'email',
+            ])
             ->add('submit', SubmitType::class)
         ;
     }
